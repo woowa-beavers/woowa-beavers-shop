@@ -1,6 +1,7 @@
-import httpx 
+import httpx  # 지갑 서버 통신을 위한 라이브러리
+
 from fastapi import APIRouter, HTTPException, Response, Form, Request, Depends
-from sqlalchemy.orm import Session # DB 세션 타입 힌팅을 위해 추가
+from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 
 # DB 연결 함수와 User 모델 불러오기
@@ -33,12 +34,11 @@ async def signup(
     # 3. DB에 저장
     db.add(new_user)
     db.commit()
-    db.refresh(new_user) 
+    db.refresh(new_user)
 
-    # 4. [지갑 생성 연동] 지갑 서버 호출 
+    # 4. [지갑 생성 연동] 지갑 서버 호출
     try:
         async with httpx.AsyncClient() as client:
-            # 주소 끝에 username을 바로 붙이는 방식 (사용자님 API 규격)
             wallet_url = f"http://10.0.2.74:8000/api/wallets/{username}"
             await client.post(wallet_url)
     except Exception as e:
@@ -58,7 +58,6 @@ async def login(
     user = db.query(User).filter(User.username == username).first()
 
     # 2. 유저가 없거나 비밀번호가 틀렸을 때 예외 처리
-    # (주의: user 딕셔너리가 아니라 SQLAlchemy 객체이므로 user.password 로 접근)
     if not user or not verify_password(password, user.password):
         raise HTTPException(status_code=401, detail="아이디 또는 비밀번호가 틀렸습니다.")
 
@@ -89,7 +88,8 @@ def verify_token(request: Request):
 
 
 @router.get("/me")
-def get_me(user_payload=Depends(verify_token), db: Session = Depends(get_db)):.
+def get_me(user_payload=Depends(verify_token), db: Session = Depends(get_db)):
+    # 토큰의 유저가 DB에 존재하는지 검증
     user = db.query(User).filter(User.username == user_payload["sub"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="유저를 찾을 수 없습니다.")
