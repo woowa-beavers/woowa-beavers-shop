@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .  
+      dockerfile: services/auth/Dockerfile 
+    container_name: fastapi_auth_server
+    ports:
+      - "8002:8000"
+    env_file:
+      - .env  
+    volumes:
+      - .:/app  
+    # main.py가 있는 정확한 경로에 맞춰서 실행 (이전 에러 로그를 참고하여 작성했습니다)
+    command: uvicorn services.auth.app.main:app --host 0.0.0.0 --port 8000 --reload
