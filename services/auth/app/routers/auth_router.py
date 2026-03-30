@@ -66,7 +66,8 @@ async def login(
     response.set_cookie(
         key="access_token",
         value=f"Bearer {token}",
-        httponly=True
+        httponly=True,
+        path="/"  # (모든 경로에서 쿠키 사용 허용)
     )
 
     return {"status": "success"}
