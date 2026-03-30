@@ -13,7 +13,7 @@ from services.auth.app.models.user import Base
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Auth Service")
+app = FastAPI(title="Auth Service", root_path="/api")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
