@@ -67,4 +67,4 @@ async def main_page(request: Request, user: str | None = Depends(get_current_use
         
     return templates.TemplateResponse(request=request, name="index.html")
 
-app.include_router(auth_router.router, prefix="/api/auth")
+app.include_router(auth_router.router, prefix="/auth")
