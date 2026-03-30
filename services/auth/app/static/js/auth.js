@@ -16,7 +16,7 @@ document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
   formData.append('password', password);
 
   try {
-    const response = await fetch('https://woowabeavers.cloud/api/auth/signup', {
+    const response = await fetch('/api/auth/signup', {
       method: 'POST',
       body: formData,
     });
@@ -47,7 +47,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   formData.append('password', password);
 
   try {
-    const response = await fetch('https://woowabeavers.cloud/api/auth/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       body: formData,
       credentials: 'include',
@@ -55,7 +55,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 
     if (response.ok) {
       alert('로그인 성공!');
-      window.location.href = '/main'; 
+      window.location.href = '/main';
     } else {
       const data = await response.json();
       alert('로그인 실패: ' + (data.detail || '정보가 일치하지 않습니다.'));
