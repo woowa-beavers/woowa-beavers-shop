@@ -22,24 +22,27 @@ app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), na
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # ---------------------------
-# 웹 페이지용 JWT 검증 함수
+# 웹 페이지용 JWT 검증 함수 (디버그 로그 추가)
 # ---------------------------
 async def get_current_user_from_cookie(request: Request):
     token = request.cookies.get("access_token")
+    print(f"🚨 [디버그] 1. 쿠키에서 꺼낸 토큰: {token}")
     
     # 쿠키가 없으면 None 반환
     if not token:
+        print("🚨 [디버그] 2. 브라우저가 쿠키를 안 보냈습니다!")
         return None
         
-    # auth_router.py에서 구워준 "Bearer " 접두사 제거
     token = token.replace("Bearer ", "")
     
     try:
         # 토큰 검증
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(f"🚨 [디버그] 3. 토큰 정상 해독 완료! 접속 유저: {payload.get('sub')}")
         return payload.get("sub")
-    except JWTError:
+    except JWTError as e:
         # 토큰이 만료되었거나 변조되었다면 None 반환
+        print(f"🚨 [디버그] 4. 토큰 해독 실패 (비밀키가 다르거나 깨짐) 에러: {e}")
         return None
 
 @app.get("/")
