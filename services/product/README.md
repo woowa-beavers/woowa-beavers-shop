@@ -45,7 +45,7 @@ DB_NAME=commerce
 ```bash
 cd services/product
 docker build -t beaver-product .
-docker run -d -p 80:8001 --env-file .env --restart always --name beaver-product beaver-product
+docker run -d -p 8000:8000 --env-file .env --restart always --name beaver-product beaver-product
 ```
 
 ### 3. 동작 확인
@@ -63,8 +63,8 @@ curl http://localhost/health
 
 | 환경 | URL |
 |------|-----|
-| 운영 (EC2-1) | http://43.203.169.11 |
-| 로컬 | http://localhost |
+| 운영 | https://woowabeavers.cloud |
+| 로컬 | http://localhost:8000 |
 
 ---
 
