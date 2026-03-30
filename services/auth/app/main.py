@@ -42,12 +42,10 @@ async def get_current_user_from_cookie(request: Request):
         # 토큰이 만료되었거나 변조되었다면 None 반환
         return None
 
-# ---------------------------
-# 페이지 라우팅
-# ---------------------------
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/login")
+    # 💡 HTTPS 깨짐/무한 리다이렉트 방지를 위해 302 상태 코드 추가 완료!
+    return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
 
 @app.get("/login")
 async def login_page(request: Request):
@@ -58,7 +56,6 @@ async def login_page(request: Request):
 async def signup_page(request: Request):
     return templates.TemplateResponse(request=request, name="signup.html")
 
-# 🔥 index.html 보여주는 main 페이지
 @app.get("/main")
 async def main_page(request: Request, user: str | None = Depends(get_current_user_from_cookie)):
     # 유효한 유저 정보가 없으면 로그인 페이지로 강제 이동 (401 에러 대신 Redirect)
@@ -67,7 +64,4 @@ async def main_page(request: Request, user: str | None = Depends(get_current_use
         
     return templates.TemplateResponse(request=request, name="index.html")
 
-# ---------------------------
-# API 라우터
-# ---------------------------
 app.include_router(auth_router.router, prefix="/api/auth")

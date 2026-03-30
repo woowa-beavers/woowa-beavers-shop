@@ -42,7 +42,7 @@ async def login(
     response: Response, 
     username: str = Form(...), 
     password: str = Form(...),
-    db: Session = Depends(get_db) # 👈 DB 세션 의존성 주입
+    db: Session = Depends(get_db) 
 ):
     # 1. DB에서 유저 정보 가져오기
     user = db.query(User).filter(User.username == username).first()

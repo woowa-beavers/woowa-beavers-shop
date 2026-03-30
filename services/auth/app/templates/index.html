@@ -9,18 +9,17 @@
     <div class="auth-container">
       <h2><span id="user-display">로딩 중...</span>님, 환영합니다! 🎉</h2>
       <p>woowa-beavers 서비스에 오신 것을 환영합니다.</p>
-
       <button id="logout-btn">로그아웃</button>
     </div>
 
     <script>
-      // 로그인된 유저 정보 가져오기
-      fetch('/api/auth/me', {
+      // 유저 정보 가져오기 (API 호출)
+      fetch('https://woowabeavers.cloud/api/auth/me', {
         credentials: 'include',
       })
         .then((res) => {
           if (!res.ok) {
-            // 로그인 안 되어 있으면 로그인 페이지로 보내기
+            // 실패하면 EC2의 로그인 화면으로 이동
             window.location.href = '/login';
           }
           return res.json();
@@ -29,13 +28,15 @@
           document.getElementById('user-display').innerText = data.username;
         })
         .catch(() => {
+          // 에러 시 EC2의 로그인 화면으로 이동
           window.location.href = '/login';
         });
 
-      // 로그아웃 (쿠키 삭제)
+      // 로그아웃 버튼
       document.getElementById('logout-btn').addEventListener('click', () => {
         document.cookie =
           'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        // 로그아웃 후 EC2의 로그인 화면으로 이동
         window.location.href = '/login';
       });
     </script>
