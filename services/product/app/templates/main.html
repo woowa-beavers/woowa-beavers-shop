@@ -1,0 +1,181 @@
+<!-- services/product/app/templates/main.html -->
+<!-- 역할: 상품 목록 페이지 (EC2-1) -->
+<!-- 데이터 흐름: FastAPI → Jinja2 렌더링 → 브라우저 / 장바구니 담기 → localStorage -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우아한 비버 쇼핑몰</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* =============================================
+           디자인 토큰 (CSS 변수)
+           ============================================= */
+        :root {
+            --bg-base: #ffffff;
+            --bg-surface: #ffffff;
+            --bg-secondary: #f8fafc;
+            --primary: #2c86c1;
+            --primary-glow: rgba(44, 134, 193, 0.15);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: var(--bg-base); background-image: radial-gradient(circle at 15% 50%, rgba(44, 134, 193, 0.03), transparent 25%), radial-gradient(circle at 85% 30%, rgba(44, 134, 193, 0.04), transparent 25%); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        /* 헤더 - 스크롤해도 상단 고정, 배경 블러 */
+        header { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; }
+
+        .logo a { display: flex; align-items: center; text-decoration: none; }
+        .logo img { height: 30px; }
+
+        .header-nav { display: flex; gap: 24px; align-items: center; }
+        .header-nav a { text-decoration: none; color: var(--text-muted); font-size: 0.88rem; font-weight: 500; transition: color 0.3s; letter-spacing: -0.3px; }
+        .header-nav a:hover { color: var(--primary); }
+
+        /* 카트 버튼 - 테두리형, hover 시 채워짐 */
+        .cart-btn { background: var(--bg-base); color: var(--primary) !important; padding: 7px 18px; border-radius: 30px; border: 1.5px solid var(--primary); font-size: 0.85rem !important; font-weight: 700; transition: all 0.3s ease; }
+        .cart-btn:hover { background: var(--primary); color: #fff !important; box-shadow: 0 6px 15px var(--primary-glow); }
+
+        /* 히어로 배너 */
+        .hero { padding: 70px 40px; text-align: center; }
+        .hero h2 { font-size: 2.6rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -2px; line-height: 1.2; color: var(--text-main); }
+        .hero h2 span { color: var(--primary); }
+        .hero p { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+        /* 상품 그리드 - 최소 240px, 화면 너비에 따라 열 수 자동 조절 */
+        .container { max-width: 1100px; margin: 0 auto 60px; padding: 0 24px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        .section-title::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+
+        /* 상품 카드 - hover 시 위로 뜨는 효과 + 블루 테두리 */
+        .product-card { background: var(--bg-surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-6px); border-color: rgba(44, 134, 193, 0.3); box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06), 0 8px 16px var(--primary-glow); }
+
+        /* 이모지 이미지 영역 - hover 시 살짝 확대 + 기울기 */
+        .product-img { background: var(--bg-secondary); padding: 32px 20px; text-align: center; font-size: 4rem; transition: transform 0.4s ease; }
+        .product-card:hover .product-img { transform: scale(1.05) rotate(3deg); }
+
+        /* 카드 하단 정보 영역 (상품명 / 가격 / 버튼) */
+        .product-info { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .product-info h3 { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
+        .price { color: var(--primary); font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; }
+
+        /* 장바구니 버튼 - 기본은 회색, 카드 hover 시 파란색으로 변경 */
+        .product-info button { width: 100%; padding: 12px; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; }
+        .product-card:hover button { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        footer { border-top: 1px solid var(--border-color); color: var(--text-muted); text-align: center; padding: 32px 24px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <!-- =============================================
+         헤더
+         - cart-count: JS updateCartCount()가 수량 갱신
+         ============================================= -->
+    <header>
+        <div class="logo">
+            <a href="/"><img src="/static/logo.png" alt="우아한 비버"></a>
+        </div>
+        <nav class="header-nav">
+            <a href="#">기획전</a>
+            <!-- TODO: [EC2-2 연동] 로그인 완료 후 href="#" → EC2-2 로그인 페이지 URL로 교체 -->
+            <a href="#">로그인</a>
+            <!-- 수량은 JS updateCartCount()가 페이지 로드 시 + 상품 추가 시 갱신 -->
+            <a href="/cart" class="cart-btn" id="cart-count">Cart (0)</a>
+        </nav>
+    </header>
+
+    <!-- 히어로 배너 -->
+    <div class="hero">
+        <h2>우아한 비버의<br><span>새로운 기준.</span></h2>
+        <p>나뭇가지보다 더 좋은 것들을 모아뒀어요</p>
+    </div>
+
+    <!-- =============================================
+         상품 목록
+         - products: FastAPI에서 Jinja2로 넘기는 컨텍스트 변수
+         - Commerce RDS 조회 결과 또는 FALLBACK_PRODUCTS
+         ============================================= -->
+    <div class="container">
+        <div class="section-title">New Arrivals</div>
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-img">{{ product.emoji }}</div>
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <!-- {:,} 포맷: 1000단위 쉼표 (예: 12,000) -->
+                    <div class="price">{{ "{:,}".format(product.price) }} ₩</div>
+                    <!--
+                        addToCart 인자: item_id(str), name(str), price(int), emoji(str)
+                        cart.html에서 item.itemId로 참조 / EC2-4로 전송 시 item_id 필드명 사용
+                    -->
+                    <button onclick="addToCart('{{ product.item_id }}', '{{ product.name }}', {{ product.price }}, '{{ product.emoji }}')">
+                        장바구니 담기
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        © 2026 BEAVER MALL. All rights reserved.
+    </footer>
+
+    <script>
+        /**
+         * 장바구니에 상품 추가
+         * - localStorage 'beaver_cart' 배열에 저장
+         * - 이미 담긴 상품이면 quantity +1, 새 상품이면 push
+         * - 저장 키: { itemId, name, price, emoji, quantity }
+         *   주의: cart.html에서 EC2-4로 보낼 때 item_id 필드명으로 변환됨 (item.itemId)
+         *
+         * @param {string} itemId  - 상품 고유 ID (예: beaver_item_01)
+         * @param {string} name    - 상품명
+         * @param {number} price   - 가격 (원 단위 정수)
+         * @param {string} emoji   - 상품 이모지
+         */
+        function addToCart(itemId, name, price, emoji) {
+            let cart = JSON.parse(localStorage.getItem('beaver_cart')) || [];
+            let existingItem = cart.find(item => item.itemId === itemId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ itemId, name, price, emoji, quantity: 1 });
+            }
+
+            localStorage.setItem('beaver_cart', JSON.stringify(cart));
+            updateCartCount();
+            alert(name + '이(가) 장바구니에 담겼습니다! 🛒');
+        }
+
+        /**
+         * 헤더 카트 버튼 수량 업데이트
+         * - cart 배열의 quantity 합산
+         * - 페이지 로드 시 + 상품 추가 시 호출
+         */
+        function updateCartCount() {
+            let cart = JSON.parse(localStorage.getItem('beaver_cart')) || [];
+            let total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = `Cart (${total})`;
+        }
+
+        // 페이지 로드 시 기존 장바구니 수량 반영
+        window.onload = updateCartCount;
+    </script>
+</body>
+</html>
