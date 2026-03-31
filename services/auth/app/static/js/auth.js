@@ -23,12 +23,13 @@ document.getElementById('signupForm')?.addEventListener('submit', async (e) => {
 
     const data = await response.json();
 
-    if (response.ok) {
-      alert('회원가입 성공! 로그인 페이지로 이동합니다.');
-      window.location.href = '/login';
-    } else {
+    if (!response.ok) {
       alert('가입 실패: ' + (data.detail || '알 수 없는 오류'));
+      return;
     }
+
+    alert('회원가입 성공! 로그인 페이지로 이동합니다.');
+    window.location.href = '/login';
   } catch (error) {
     console.error('에러:', error);
     alert('서버와 연결할 수 없습니다.');
@@ -53,13 +54,14 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
       credentials: 'include',
     });
 
-    if (response.ok) {
-      alert('로그인 성공!');
-      window.location.href = '/main';
-    } else {
+    if (!response.ok) {
       const data = await response.json();
       alert('로그인 실패: ' + (data.detail || '정보가 일치하지 않습니다.'));
+      return;
     }
+
+    alert('로그인 성공!');
+    window.location.href = '/';
   } catch (error) {
     console.error('에러:', error);
     alert('서버와 연결할 수 없습니다.');
