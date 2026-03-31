@@ -89,7 +89,8 @@
             <a href="/"><img src="/static/logo.png" alt="우아한 비버"></a>
         </div>
         <nav class="header-nav">
-            <a href="https://woowabeavers.cloud/login">로그인</a>
+            <!-- checkLogin()이 로그인 상태면 텍스트를 username으로 교체 -->
+            <a href="https://woowabeavers.cloud/login" id="login-link">로그인</a>
             <!-- 수량은 JS updateCartCount()가 페이지 로드 시 + 상품 추가 시 갱신 -->
             <a href="/cart" class="cart-btn" id="cart-count">Cart (0)</a>
         </nav>
@@ -172,8 +173,33 @@
             document.getElementById('cart-count').innerText = `Cart (${total})`;
         }
 
-        // 페이지 로드 시 기존 장바구니 수량 반영
-        window.onload = updateCartCount;
+        /**
+         * 로그인 상태 확인
+         * - EC2-2 GET /api/auth/me 호출 (access_token 쿠키 자동 전송)
+         * - 로그인 상태면 헤더 링크를 "{username}님"으로 교체
+         * - 비로그인 또는 오류면 "로그인" 링크 유지
+         */
+        async function checkLogin() {
+            try {
+                const res = await fetch('https://woowabeavers.cloud/api/auth/me', {
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const loginLink = document.getElementById('login-link');
+                    loginLink.textContent = `${data.username}님`;
+                    loginLink.href = 'https://woowabeavers.cloud/main';
+                }
+            } catch (e) {
+                // 비로그인 또는 네트워크 오류 - 로그인 링크 유지
+            }
+        }
+
+        // 페이지 로드 시 장바구니 수량 + 로그인 상태 반영
+        window.onload = function() {
+            updateCartCount();
+            checkLogin();
+        };
     </script>
 </body>
 </html>
