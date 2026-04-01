@@ -5,7 +5,7 @@ from app.database import get_db
 from app.schemas.order_schema import OrderRequest, OrderResponse, OrderListResponse
 from app.services.order_service import OrderService
 
-router = APIRouter()
+router = APIRouter(prefix="/api/order", tags=["Order"])
 
 # [POST] 결제 및 주문 생성
 # 주소: POST /api/checkout

@@ -8,10 +8,10 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Order Service")
 
-# CORS 설정 시작
 origins = [
-    "http://localhost:8001",
-    "http://127.0.0.1:8001",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://woowabeavers.cloud"
 ]
 
 app.add_middleware(
