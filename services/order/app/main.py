@@ -7,14 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 # DB 테이블 생성
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Order Service")
+app = FastAPI(
+    title="Order Service",
+    docs_url="/api/orders/docs",
+    openapi_url="/api/orders/openapi.json"
+)
 
-# CORS 설정
-origins = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://woowabeavers.cloud"
-]
+origins = ["https://woowabeavers.cloud", "http://localhost:8000"]
 
 app.add_middleware(
     CORSMiddleware,
