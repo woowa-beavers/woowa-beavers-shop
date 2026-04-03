@@ -13,3 +13,4 @@ class Product(Base):
     name    = Column(String(100), nullable=False)                          # 상품명
     price   = Column(Integer, nullable=False)                              # 가격 (원 단위 정수)
     emoji   = Column(String(20))                                           # 상품 이모지 (없으면 빈칸 렌더링)
+    stock   = Column(Integer, nullable=False, default=100)                 # 재고 수량

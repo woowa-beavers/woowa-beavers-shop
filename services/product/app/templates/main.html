@@ -70,6 +70,7 @@
         .product-info { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 10px; }
         .product-info h3 { font-size: 1rem; font-weight: 700; color: var(--text-main); margin: 0; }
         .price { color: var(--primary); font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; }
+        .stock { color: var(--text-muted); font-size: 0.8rem; }
 
         /* 장바구니 버튼 - 기본은 회색, 카드 hover 시 파란색으로 변경 */
         .product-info button { width: 100%; padding: 12px; background: var(--bg-base); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: all 0.3s ease; }
@@ -117,6 +118,7 @@
                     <h3>{{ product.name }}</h3>
                     <!-- {:,} 포맷: 1000단위 쉼표 (예: 12,000) -->
                     <div class="price">{{ "{:,}".format(product.price) }} ₩</div>
+                    <div class="stock">재고 {{ product.stock }}개</div>
                     <!--
                         addToCart 인자: item_id(str), name(str), price(int), emoji(str)
                         cart.html에서 item.itemId로 참조 / EC2-4로 전송 시 item_id 필드명 사용

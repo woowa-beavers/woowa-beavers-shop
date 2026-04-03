@@ -106,8 +106,7 @@
             총 결제 금액 <span class="total-price" id="total-price">0</span> ₩
         </div>
 
-        <!-- TODO: [EC2-4 연동] 서버 기동 + CORS 도메인 추가 확인 후 버튼 텍스트 "결제하기"로 변경 -->
-        <button class="checkout-btn" onclick="checkout()">결제하기 (API 연동 대기중)</button>
+        <button class="checkout-btn" onclick="checkout()">결제하기</button>
     </div>
 
     <footer>
@@ -217,8 +216,8 @@
             return null;
         }
 
-        // API Gateway 엔드포인트 (→ EC2-4 주문/결제 서버)
-        const ORDER_API = "https://c9muocyrwc.execute-api.ap-northeast-2.amazonaws.com/api/checkout";
+        // 주문/결제 API 엔드포인트 (ALB → EC2-4)
+        const ORDER_API = "https://woowabeavers.cloud/api/orders/checkout";
 
         /**
          * 결제 처리

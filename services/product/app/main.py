@@ -21,10 +21,10 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # DB 연결 실패 또는 products 테이블이 비어있을 때 보여줄 임시 상품 데이터
 # 주의: item_id 형식(ITEM-00x)이 실제 DB 데이터(beaver_item_0x)와 다름 — 화면 확인용으로만 사용
 FALLBACK_PRODUCTS = [
-    {"id": 1, "item_id": "ITEM-001", "name": "프리미엄 나뭇가지", "price": 12000, "emoji": "🪵"},
-    {"id": 2, "item_id": "ITEM-002", "name": "비버댐 건축 키트", "price": 89000, "emoji": "🏠"},
-    {"id": 3, "item_id": "ITEM-003", "name": "댐 공사 안전모", "price": 45000, "emoji": "⛑️"},
-    {"id": 4, "item_id": "ITEM-004", "name": "비버 치아 관리 세트", "price": 22000, "emoji": "🦷"},
+    {"id": 1, "item_id": "ITEM-001", "name": "프리미엄 나뭇가지", "price": 12000, "emoji": "🪵", "stock": 100},
+    {"id": 2, "item_id": "ITEM-002", "name": "비버댐 건축 키트", "price": 89000, "emoji": "🏠", "stock": 100},
+    {"id": 3, "item_id": "ITEM-003", "name": "댐 공사 안전모", "price": 45000, "emoji": "⛑️", "stock": 100},
+    {"id": 4, "item_id": "ITEM-004", "name": "비버 치아 관리 세트", "price": 22000, "emoji": "🦷", "stock": 100},
 ]
 
 
