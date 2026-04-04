@@ -1,5 +1,3 @@
-import httpx  # 지갑 서버 통신을 위한 라이브러리
-
 from fastapi import APIRouter, HTTPException, Response, Form, Request, Depends
 from sqlalchemy.orm import Session
 from jose import jwt, JWTError
@@ -28,21 +26,14 @@ async def signup(
     # 2. 새로운 유저 객체 생성 (비밀번호는 해싱 처리)
     new_user = User(
         username=username,
-        password=hash_password(password)
+        password=hash_password(password),
+        balance=1000000 # 신규 유저 가입시 100만 포인트 지급
     )
 
     # 3. DB에 저장
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-
-    # 4. [지갑 생성 연동] 지갑 서버 호출
-    try:
-        async with httpx.AsyncClient() as client:
-            wallet_url = f"http://10.0.2.74:8000/api/wallets/{username}"
-            await client.post(wallet_url)
-    except Exception as e:
-        print(f"지갑 생성 중 통신 에러 발생: {e}")
 
     return {"status": "success"}
 
