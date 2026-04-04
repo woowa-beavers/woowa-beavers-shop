@@ -8,3 +8,4 @@ class User(Base):
     
     username = Column(String(50), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
+    balance = Column(Integer, default=1000000)
