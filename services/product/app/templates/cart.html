@@ -72,6 +72,13 @@
         .clear-btn { background: #fff; color: #ef4444; border: 1px solid #ef4444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.3s; }
         .clear-btn:hover { background: #ef4444; color: #fff; }
 
+        /* 수량 조절 컨트롤 */
+        .item-actions { display: flex; align-items: center; gap: 12px; }
+        .qty-control { display: flex; align-items: center; gap: 0; border: 1.5px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+        .qty-btn { background: var(--bg-secondary); border: none; width: 32px; height: 32px; font-size: 1.1rem; font-weight: 700; cursor: pointer; color: var(--text-main); transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+        .qty-btn:hover { background: var(--primary-glow); color: var(--primary); }
+        .qty-display { width: 36px; text-align: center; font-weight: 700; font-size: 0.95rem; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); height: 32px; line-height: 32px; }
+
         footer { border-top: 1px solid var(--border-color); color: var(--text-muted); text-align: center; padding: 32px 24px; font-size: 0.85rem; margin-top: 80px; }
     </style>
 </head>
@@ -155,16 +162,41 @@
                             <div>
                                 <h3>${escapeHtml(item.name)}</h3>
                                 <!-- toLocaleString(): 가격 1000단위 쉼표 -->
-                                <p>${item.price.toLocaleString()} ₩ x ${item.quantity}개</p>
+                                <p>${item.price.toLocaleString()} ₩</p>
                             </div>
                         </div>
-                        <!-- removeItem에 index 전달 → splice로 해당 항목만 제거 -->
-                        <button class="clear-btn" onclick="removeItem(${index})">삭제</button>
+                        <div class="item-actions">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">−</button>
+                                <span class="qty-display">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <!-- removeItem에 index 전달 → splice로 해당 항목만 제거 -->
+                            <button class="clear-btn" onclick="removeItem(${index})">삭제</button>
+                        </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
             totalPriceEl.innerText = total.toLocaleString();
+        }
+
+        /**
+         * 수량 조절
+         * - delta: +1 또는 -1
+         * - 수량이 1이하로 내려가면 해당 아이템 삭제
+         *
+         * @param {number} index - cart 배열에서의 위치
+         * @param {number} delta - 변화량 (+1 or -1)
+         */
+        function updateQuantity(index, delta) {
+            let cart = JSON.parse(localStorage.getItem('beaver_cart')) || [];
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('beaver_cart', JSON.stringify(cart));
+            loadCart();
         }
 
         /**
