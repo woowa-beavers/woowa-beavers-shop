@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <h2><span id="user-display">로딩 중...</span>님, 환영합니다! 🎉</h2>
+      <p>woowa-beavers 서비스에 오신 것을 환영합니다.</p>
+      <button id="logout-btn">로그아웃</button>
+    </div>
+
+    <script>
+      // 유저 정보 가져오기 (API 호출)
+      fetch('https://woowabeavers.cloud/api/auth/me', {
+        credentials: 'include',
+      })
+        .then((res) => {
+          if (!res.ok) {
+            // 실패하면 EC2의 로그인 화면으로 이동
+            window.location.href = '/login';
+          }
+          return res.json();
+        })
+        .then((data) => {
+          document.getElementById('user-display').innerText = data.username;
+        })
+        .catch(() => {
+          // 에러 시 EC2의 로그인 화면으로 이동
+          window.location.href = '/login';
+        });
+
+      // 로그아웃 버튼
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        document.cookie =
+          'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        // 로그아웃 후 EC2의 로그인 화면으로 이동
+        window.location.href = '/login';
+      });
+    </script>
+  </body>
+</html>
