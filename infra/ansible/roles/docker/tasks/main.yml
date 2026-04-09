@@ -1,0 +1,23 @@
+---
+- name: Docker 설치
+  dnf:
+    name: docker
+    state: present
+
+- name: Docker 활성화 및 시작
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: ec2-user를 docker 그룹에 추가
+  user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: Docker Compose 설치
+  get_url:
+    url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'

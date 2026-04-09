@@ -1,0 +1,16 @@
+---
+- name: rsyslog 설치
+  dnf:
+    name: rsyslog
+    state: present
+
+- name: rsyslog 활성화 및 시작
+  systemd:
+    name: rsyslog
+    enabled: yes
+    state: started
+
+- name: /var/log/secure 존재 확인
+  wait_for:
+    path: /var/log/secure
+    timeout: 30

@@ -1,0 +1,3 @@
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o ProxyJump=ec2-user@3.36.89.18'
+
+cw_log_group: /ec2/nat-instance/secure-logs

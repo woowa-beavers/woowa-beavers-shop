@@ -1,0 +1,4 @@
+ansible_host: 3.36.89.18
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+cw_log_group: /ec2/bastion/secure-logs

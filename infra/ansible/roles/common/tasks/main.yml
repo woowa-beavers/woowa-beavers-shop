@@ -1,0 +1,20 @@
+---
+- name: dnf 업데이트
+  dnf:
+    name: "*"
+    state: latest
+
+- name: 기본 패키지 설치
+  dnf:
+    name:
+      - git
+      - curl
+      - wget
+      - unzip
+      - python3
+      - python3-pip
+    state: present
+
+- name: 타임존 설정 (KST)
+  timezone:
+    name: Asia/Seoul
