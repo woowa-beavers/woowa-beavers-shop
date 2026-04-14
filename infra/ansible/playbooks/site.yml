@@ -1,0 +1,4 @@
+---
+- import_playbook: bastion.yml
+- import_playbook: nat.yml
+- import_playbook: ec2_private.yml

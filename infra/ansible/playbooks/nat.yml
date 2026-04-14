@@ -1,0 +1,8 @@
+---
+- name: NAT Instance 설정
+  hosts: nat
+  become: yes
+  roles:
+    - common
+    - rsyslog
+    - cloudwatch_agent
