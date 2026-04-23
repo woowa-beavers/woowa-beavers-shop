@@ -140,12 +140,17 @@ docker-compose up -d auth
 
 | 서비스 | URL |
 |--------|-----|
-| 상품 | http://localhost:8001 |
-| Auth | http://localhost:8002 |
-| 재고 | http://localhost:8003 |
-| 주문/결제 | http://localhost:8004 |
-| 관리자 | http://localhost:8005 |
+| 상품 | https://woowabeavers.cloud/ |
+| Auth | https://woowabeavers.cloud/login |
+| 재고 | api |
+| 주문/결제 | api |
+| 관리자 | `under construction...` |
 
 ---
 
+<<<<<<< HEAD
 "." 
+=======
+
+>>>>>>> 99e2f4da688414d510e398cf8fb0746e291b90ea
+.
