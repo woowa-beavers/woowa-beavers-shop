@@ -1,0 +1,8 @@
+---
+- name: Bastion Host 설정
+  hosts: bastion
+  become: yes
+  roles:
+    - common
+    - rsyslog
+    - cloudwatch_agent

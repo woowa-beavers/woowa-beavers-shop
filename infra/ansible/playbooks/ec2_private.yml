@@ -1,0 +1,10 @@
+---
+- name: EC2 Private 설정
+  hosts: ec2_private
+  become: yes
+  roles:
+    - common
+    - rsyslog
+    - docker
+    - cloudwatch_agent
+    - app_deploy
