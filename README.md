@@ -149,8 +149,13 @@ docker-compose up -d auth
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "." 
 =======
 
 >>>>>>> 99e2f4da688414d510e398cf8fb0746e291b90ea
+.
+=======
+
+>>>>>>> origin/main
 .
