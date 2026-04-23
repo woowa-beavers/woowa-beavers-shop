@@ -148,8 +148,4 @@ docker-compose up -d auth
 
 ---
 
-Co-Authored-by: ye11oc4t <ye11oc4t@gmail.com>
-Co-Authored-by: yan9oon <yangjiwon5246@naver.com>
-Co-Authored-by: bbibbi0425 <bbibbi0425@gmail.com>
-Co-Authored-by: annseojin <hjsj1226@naver.com>
 
