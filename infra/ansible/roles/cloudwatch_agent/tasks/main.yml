@@ -1,0 +1,25 @@
+---
+- name: CloudWatch Agent 설치
+  dnf:
+    name: amazon-cloudwatch-agent
+    state: present
+
+- name: CloudWatch Agent 설정 파일 복사
+  template:
+    src: config.json.j2
+    dest: /opt/aws/amazon-cloudwatch-agent/bin/config.json
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: CloudWatch Agent 실행
+  shell: |
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -a fetch-config -m ec2 -s \
+    -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
+
+- name: CloudWatch Agent 활성화
+  systemd:
+    name: amazon-cloudwatch-agent
+    enabled: yes
+    state: started
