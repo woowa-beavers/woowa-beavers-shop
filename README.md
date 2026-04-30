@@ -19,6 +19,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 
+[![바로가기](https://img.shields.io/badge/🛒_쇼핑몰_바로가기-woowabeavers.cloud-2c86c1?style=for-the-badge)](https://woowabeavers.cloud/)
+
 ---
 
 Woowa Beavers Shop은 CERT 운영을 목적으로 설계된 MSA 기반 쇼핑몰 서비스입니다.  
