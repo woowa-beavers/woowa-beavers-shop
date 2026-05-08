@@ -91,7 +91,7 @@
         </div>
         <nav class="header-nav">
             <!-- checkLogin()이 로그인 상태면 텍스트를 username으로 교체 -->
-            <a href="https://woowabeavers.cloud/login" id="login-link">로그인</a>
+            <a href="https://shop.woowabeavers.cloud/login" id="login-link">로그인</a>
             <!-- 수량은 JS updateCartCount()가 페이지 로드 시 + 상품 추가 시 갱신 -->
             <a href="/cart" class="cart-btn" id="cart-count">Cart (0)</a>
         </nav>
@@ -183,14 +183,14 @@
          */
         async function checkLogin() {
             try {
-                const res = await fetch('https://woowabeavers.cloud/api/auth/me', {
+                const res = await fetch('https://shop.woowabeavers.cloud/api/auth/me', {
                     credentials: 'include'
                 });
                 if (res.ok) {
                     const data = await res.json();
                     const loginLink = document.getElementById('login-link');
                     loginLink.textContent = `${data.username}님`;
-                    loginLink.href = 'https://woowabeavers.cloud/main';
+                    loginLink.href = 'https://shop.woowabeavers.cloud/main';
                 }
             } catch (e) {
                 // 비로그인 또는 네트워크 오류 - 로그인 링크 유지
