@@ -19,7 +19,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 
-[![바로가기](https://img.shields.io/badge/🛒_쇼핑몰_바로가기-woowabeavers.cloud-2c86c1?style=for-the-badge)](https://woowabeavers.cloud/)
+[![바로가기](https://img.shields.io/badge/🛒_쇼핑몰_바로가기-woowabeavers.cloud-2c86c1?style=for-the-badge)](https://shop.woowabeavers.cloud/)
 
 ---
 
@@ -184,8 +184,8 @@ docker-compose up -d auth
 
 | 서비스 | URL |
 |:---:|:---|
-| 상품 | https://woowabeavers.cloud/ |
-| Auth | https://woowabeavers.cloud/login |
+| 상품 | https://shop.woowabeavers.cloud/ |
+| Auth | https://shop.woowabeavers.cloud/login |
 | 재고 | api |
 | 주문/결제 | api |
 | 관리자 | under construction... |

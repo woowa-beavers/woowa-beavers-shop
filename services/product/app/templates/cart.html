@@ -94,7 +94,7 @@
         </div>
         <nav class="header-nav">
             <!-- checkLogin()이 로그인 상태면 텍스트를 username으로 교체 -->
-            <a href="https://woowabeavers.cloud/login" class="nav-link" id="login-link">로그인</a>
+            <a href="https://shop.woowabeavers.cloud/login" class="nav-link" id="login-link">로그인</a>
             <!-- 수량은 JS updateCartCount()가 페이지 로드 시 갱신 -->
             <a href="/cart" class="cart-btn" id="cart-count">Cart (0)</a>
         </nav>
@@ -232,14 +232,14 @@
          */
         async function checkLogin() {
             try {
-                const res = await fetch('https://woowabeavers.cloud/api/auth/me', {
+                const res = await fetch('https://shop.woowabeavers.cloud/api/auth/me', {
                     credentials: 'include'
                 });
                 if (res.ok) {
                     const data = await res.json();
                     const loginLink = document.getElementById('login-link');
                     loginLink.textContent = `${data.username}님`;
-                    loginLink.href = 'https://woowabeavers.cloud/main';
+                    loginLink.href = 'https://shop.woowabeavers.cloud/main';
                     return data.username;
                 }
             } catch (e) {
@@ -249,7 +249,7 @@
         }
 
         // 주문/결제 API 엔드포인트 (ALB → EC2-4)
-        const ORDER_API = "https://woowabeavers.cloud/api/orders/checkout";
+        const ORDER_API = "https://shop.woowabeavers.cloud/api/orders/checkout";
 
         /**
          * 결제 처리
@@ -267,7 +267,7 @@
             const username = await checkLogin();
             if (!username) {
                 alert("로그인이 필요합니다.");
-                window.location.href = 'https://woowabeavers.cloud/login';
+                window.location.href = 'https://shop.woowabeavers.cloud/login';
                 return;
             }
 
